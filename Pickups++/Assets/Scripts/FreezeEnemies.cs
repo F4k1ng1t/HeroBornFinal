@@ -4,38 +4,44 @@ using UnityEngine;
 
 public class FreezeEnemies : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public PlayerBehavior player;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" && other.GetType() == typeof(CapsuleCollider))
         {
-            other.gameObject.GetComponent<EnemyBehavior>().agentCanMove = false;
-            other.gameObject.GetComponent<EnemyBehavior>().agent.destination = other.gameObject.transform.position;
+            if (player.flashlightIsOn)
+            {
+                other.gameObject.GetComponent<EnemyBehavior>().AgentCanMove = false;
+                Debug.Log("Enemy Enter Light on");
+            }
+            else
+            {
+                other.gameObject.GetComponent<EnemyBehavior>().AgentCanMove = true;
+                Debug.Log("Enemy Enter Light off");
+            }
+
         }
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" && other.GetType() == typeof(CapsuleCollider))
         {
-            other.gameObject.GetComponent<EnemyBehavior>().agentCanMove = false;
+            if (player.flashlightIsOn)
+            {
+                other.gameObject.GetComponent<EnemyBehavior>().AgentCanMove = false;
+            }
+            else
+            {
+                other.gameObject.GetComponent<EnemyBehavior>().AgentCanMove = true;
+            }
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" && other.GetType() == typeof(CapsuleCollider))
         {
-            other.gameObject.GetComponent<EnemyBehavior>().agentCanMove = true;
-            other.gameObject.GetComponent<EnemyBehavior>().agent.destination = GameObject.Find("Player").transform.position;
+            Debug.Log("Enemy Exit");
+            other.gameObject.GetComponent<EnemyBehavior>().AgentCanMove = true;
         }
     }
 }

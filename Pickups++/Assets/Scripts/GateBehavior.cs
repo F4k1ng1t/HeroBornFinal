@@ -11,15 +11,14 @@ public class GateBehavior : MonoBehaviour
     public GameObject Lock3;
     public GameObject LeftDoor;
     public GameObject Rightdoor;
-    //public Animator LeftDoorAnim;
-    //public Animator RightDoorAnim;
+    public Animator left_anim;
+    public Animator right_anim;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        //LeftDoorAnim = GetComponent<Animator>();
-        //RightDoorAnim = GetComponent<Animator>();
+        
     }
 
    void OnTriggerStay(Collider other)
@@ -43,17 +42,12 @@ public class GateBehavior : MonoBehaviour
                 {
                     Lock1.SetActive(false);
                     gameManager.Locks -= 1;
-                    LeftDoor.SetActive(false);
-                    Rightdoor.SetActive(false);
+                    if (left_anim != null)
+                        left_anim.Play("GateOpen2");
+                    if (right_anim != null)
+                        right_anim.Play("GateOpen1");
                 }
-                else
-                {
 
-                    //LeftDoorAnim.Play();
-                    //RightDoorAnim.Play();
-                    //No idea how to implement the above, will consider later
-                    
-                }
             }
         }
     }

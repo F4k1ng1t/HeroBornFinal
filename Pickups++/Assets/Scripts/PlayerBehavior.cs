@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 
@@ -12,9 +13,10 @@ public class PlayerBehavior : MonoBehaviour
     public GunAnims gunAnims;
     public GameObject gun;
     public GameObject flashlight;
-    public GameObject flashlightLight;
+    public Light flashlightLight;
     public GameObject key;
-     
+    public GameObject flashLightCollider;
+    
 
     public float moveSpeed = 10f;
 
@@ -40,12 +42,12 @@ public class PlayerBehavior : MonoBehaviour
     public bool hasGun = false;
     private bool flashlightIsOut = false;
     public bool hasFlashlight = false;
-    private bool flashlightIsOn = false;
+    public bool flashlightIsOn = false;
     public bool keyIsOut = false;
     public bool hasKey = false;
 
-    public float nextTimeToFire = 0f;
-    public float fireRate = 10f;
+    public float cooldownTimestamp = 0f;
+    public float cooldown = 0.5f;
 
 
     public bool invertCamera = false;
@@ -88,11 +90,11 @@ public class PlayerBehavior : MonoBehaviour
         vInput = Input.GetAxis("Vertical") * moveSpeed;
         hInput = Input.GetAxis("Horizontal") * moveSpeed;
         
-        if(Input.GetMouseButtonDown(0) && gunIsOut && Time.time >= nextTimeToFire)
+        if(Input.GetMouseButtonDown(0) && gunIsOut)
         {
             canShoot = true;
-            nextTimeToFire = Time.time + 1f / fireRate;
         }
+        
         
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
@@ -135,6 +137,7 @@ public class PlayerBehavior : MonoBehaviour
             {
                 flashlight.SetActive(false);
                 flashlightIsOut = false;
+                flashlightIsOn = false;
             }
             else if (gunIsOut && hasGun)
             {
@@ -142,6 +145,7 @@ public class PlayerBehavior : MonoBehaviour
                 gunIsOut = false;
                 flashlight.SetActive(true);
                 flashlightIsOut = true;
+                flashlightIsOn = true;
             }
             else if (keyIsOut && hasKey)
             {
@@ -149,6 +153,7 @@ public class PlayerBehavior : MonoBehaviour
                 keyIsOut = false;
                 flashlight.SetActive(true);
                 flashlightIsOut = true;
+                flashlightIsOn = true;
             }
             else
             {
@@ -156,6 +161,7 @@ public class PlayerBehavior : MonoBehaviour
                 keyIsOut = false;
                 gunIsOut = false;
                 flashlight.SetActive(true);
+                flashlightIsOn = true;
             }
             
         }
@@ -197,8 +203,21 @@ public class PlayerBehavior : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0) && flashlightIsOut)
         {
-            flashlightIsOn = !flashlightIsOn;
-            flashlightLight.SetActive(flashlightIsOn);
+            if (flashlightIsOn)
+            {
+                flashlightLight.intensity = 0;
+                flashlightIsOn = false;
+                //flashLightCollider.SetActive(false);
+            }
+                
+            else
+            {
+                flashlightLight.intensity = 20;
+                flashlightIsOn = true;
+                //flashLightCollider.SetActive(true);
+
+            }
+                
         }
         
 
@@ -225,12 +244,14 @@ public class PlayerBehavior : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("collide");
         if (collision.gameObject.tag == "Enemy")
         {
             gameManager.HP -= 1;
             collision.gameObject.SetActive(false);
             
         }
+        
     }
 
     void FixedUpdate()
@@ -245,7 +266,7 @@ public class PlayerBehavior : MonoBehaviour
 
         if (canShoot)
         {
-            Shoot();
+            tryShoot();
         }
         
 
@@ -259,6 +280,20 @@ public class PlayerBehavior : MonoBehaviour
         bool grounded = Physics.CheckCapsule(_col.bounds.center, capsuleBottom, distanceToGround, groundLayer, QueryTriggerInteraction.Ignore);
         return grounded;
     }
+
+    void tryShoot()
+    {
+        if (Time.time > cooldownTimestamp)
+        {
+            cooldownTimestamp = Time.time + cooldown;
+            Shoot();
+        }
+        else
+        {
+            canShoot = false;
+        }
+    }
+
     private void Shoot()
     {
         GameObject newBullet = Instantiate(bullet, Main_Camera.transform.position + Main_Camera.transform.forward, this.transform.rotation) as GameObject;

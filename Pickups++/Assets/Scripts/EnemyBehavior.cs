@@ -9,7 +9,7 @@ public class EnemyBehavior : MonoBehaviour
 
     public List<Transform> locations;
 
-    private int locationIndex = 0;
+    public int locationIndex = 0;
 
     public NavMeshAgent agent;
 
@@ -17,8 +17,28 @@ public class EnemyBehavior : MonoBehaviour
 
     private int _lives = 3;
 
-    public bool agentCanMove = true;
+    public HideEnemy hide;
 
+    private bool agentCanMove = true;
+    public bool AgentCanMove
+    {
+        get { return agentCanMove; }
+
+        set
+        {
+            agentCanMove = value;
+
+            if (agentCanMove)
+            {
+                ResetPatrolRoute();
+            }
+                
+            else
+                agent.destination = this.transform.position;
+
+            
+        }
+    }
     public int Enemylives
     {
         get { return _lives; }
@@ -33,13 +53,23 @@ public class EnemyBehavior : MonoBehaviour
             }
         }
     }
+    
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player").transform;
+        if(GetComponent<HideEnemy>() != null)
+            hide = GetComponent<HideEnemy>();
 
         InitializePatrolRoute();
         MoveToNextPatrolLocation();
+    }
+    void ResetPatrolRoute()
+    {
+        if (agent.remainingDistance < 0.2f && !agent.pathPending)
+        {
+            MoveToNextPatrolLocation();
+        }
     }
     void InitializePatrolRoute()
     {
@@ -55,7 +85,7 @@ public class EnemyBehavior : MonoBehaviour
             MoveToNextPatrolLocation();
         }    
     }
-    void MoveToNextPatrolLocation()
+    private void MoveToNextPatrolLocation()
     {
         if (locations.Count == 0)
             return;
@@ -76,9 +106,10 @@ public class EnemyBehavior : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.name == "Player")
+        if (other.tag == "Player")
         {
             Debug.Log("Player Detected - attack!");
+            //hide.EnemyShow();
             if (agentCanMove)
             {
                 agent.destination = player.position;
@@ -88,19 +119,23 @@ public class EnemyBehavior : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if(other.name == "Player")
+        if(other.tag == "Player")
         {
             if (agentCanMove)
             {
                 agent.destination = player.position;
             }
+            
         }
     }
     void OnTriggerExit(Collider other)
     {
-        if(other.name == "Player")
+        if(other.tag == "Player")
         {
             Debug.Log("Player out of range, resume patrol");
+            ResetPatrolRoute();
+            //hide.EnemyHide();
         }
+        
     }
 }

@@ -28,6 +28,7 @@ public class GameBehavior : MonoBehaviour, Imanager
     public Stack<string> lootStack = new Stack<string>();
     private string _state;
     private bool _buttonPressed = false;
+    public Gate2Behavior g2b;
     public string State
     {
         get { return _state; }
@@ -83,7 +84,11 @@ public class GameBehavior : MonoBehaviour, Imanager
             _buttonPressed = value;
             if(_buttonPressed )
             {
-                labelText = "Objective: Survive.";
+                labelText = "Woah a gun! wait what's that noise?";
+                g2b.OpenGate();
+                GameObject.Find("EnemyGroup").SetActive(true);
+                GameObject.Find("Revolver").SetActive(true);
+
             }
         }
     }
