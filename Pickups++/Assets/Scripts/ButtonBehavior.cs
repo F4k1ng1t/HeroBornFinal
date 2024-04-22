@@ -41,7 +41,7 @@ public class ButtonBehavior : MonoBehaviour
             else if (Input.GetKey(KeyCode.E) && gameManager.Locks >= 0)
             {
                 _anim.Play("ButtonPress");
-                gameManager.labelText = "Hm. nothing happened.";
+                gameManager.LabelText = "Hm. nothing happened.";
             }
         }
     }

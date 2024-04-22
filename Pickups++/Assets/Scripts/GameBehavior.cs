@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using CustomExtensions;
 using UnityEngine.UIElements;
+using TMPro;
 
 public class GameBehavior : MonoBehaviour, Imanager
 {
@@ -19,7 +20,7 @@ public class GameBehavior : MonoBehaviour, Imanager
     private int _keysCollected = 0;
     private int _currentKeys = 0;
     private int _locksRemaining = 3;
-    public string labelText = "Collect all 3 keys to unlock the gate and escape!";
+    
     public int maxKeys = 3;
     public bool showWinScreen = false;
     public bool showLossScreen = false;
@@ -29,6 +30,22 @@ public class GameBehavior : MonoBehaviour, Imanager
     private string _state;
     private bool _buttonPressed = false;
     public Gate2Behavior g2b;
+
+    string _labelText = "Collect all 3 keys to unlock the gate and escape!";
+    [SerializeField] TextMeshProUGUI labelText;
+    public string LabelText
+    {
+        get
+        {
+            return _labelText;
+        }
+        set
+        {
+            _labelText = value;
+            labelText.text = $"{_labelText}";
+        }
+    }
+
     public string State
     {
         get { return _state; }
@@ -41,6 +58,7 @@ public class GameBehavior : MonoBehaviour, Imanager
         InventoryList<string> inventoryList = new InventoryList<string>();
         inventoryList.SetItem("Potion");
         Debug.Log(inventoryList.Item);
+        LabelText = _labelText;
     }
 
     public void Initialize()
@@ -84,7 +102,7 @@ public class GameBehavior : MonoBehaviour, Imanager
             _buttonPressed = value;
             if(_buttonPressed )
             {
-                labelText = "Woah a gun! wait what's that noise?";
+                LabelText = "Woah a gun! wait what's that noise?";
                 g2b.OpenGate();
                 GameObject.Find("EnemyGroup").SetActive(true);
                 GameObject.Find("Revolver").SetActive(true);
@@ -102,12 +120,12 @@ public class GameBehavior : MonoBehaviour, Imanager
             
             if (_keysCollected >= maxKeys)
             {
-                labelText = "You've found all the keys! Go unlock the gate!";
+                LabelText = "You've found all the keys! Go unlock the gate!";
                 
             }
             else
             {
-                labelText = "Key found, only " + (maxKeys - _keysCollected) + " more to go.";
+                LabelText = "Key found, only " + (maxKeys - _keysCollected) + " more to go.";
             }
         }
         
@@ -124,7 +142,7 @@ public class GameBehavior : MonoBehaviour, Imanager
             if (_locksRemaining == 0)
             {
 
-                labelText = "The Gate is open! Let's get out of here!";
+                LabelText = "The Gate is open! Let's get out of here!";
             }
         }
     }
@@ -137,12 +155,12 @@ public class GameBehavior : MonoBehaviour, Imanager
             currentHP = value;
             if (currentHP <= 0)
             {
-                labelText = "You died. Try again?";
+                LabelText = "You died. Try again?";
                 Jumpscare();
             }
             if (currentHP > 1)
             {
-                labelText = "You feel invigorated.";
+                LabelText = "You feel invigorated.";
             }
         }
     }
@@ -179,7 +197,7 @@ public class GameBehavior : MonoBehaviour, Imanager
     {
         GUI.Box(new Rect(20,50,150,25), "Keys Collected:" + _keysCollected);
 
-        GUI.Label(new Rect(Screen.width / 2, Screen.height - 50,300,50), labelText);
+        
         if (showLossScreen)
         {
             UnityEngine.Cursor.lockState = CursorLockMode.Confined;

@@ -10,9 +10,8 @@ public class GateBehavior : MonoBehaviour
     public GameObject Lock2;
     public GameObject Lock3;
     public GameObject LeftDoor;
-    public GameObject Rightdoor;
-    public Animator left_anim;
-    public Animator right_anim;
+    public GameObject RightDoor;
+    
 
 
     // Start is called before the first frame update
@@ -42,10 +41,10 @@ public class GateBehavior : MonoBehaviour
                 {
                     Lock1.SetActive(false);
                     gameManager.Locks -= 1;
-                    if (left_anim != null)
-                        left_anim.Play("GateOpen2");
-                    if (right_anim != null)
-                        right_anim.Play("GateOpen1");
+                    LeftDoor.SetActive(false);
+                    RightDoor.SetActive(false);
+                    
+
                 }
 
             }
