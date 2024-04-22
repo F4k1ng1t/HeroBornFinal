@@ -31,8 +31,13 @@ public class GameBehavior : MonoBehaviour, Imanager
     private bool _buttonPressed = false;
     public Gate2Behavior g2b;
 
+    [SerializeField] GameObject enemyGroup;
+    [SerializeField] GameObject revolver;
+
     string _labelText = "Collect all 3 keys to unlock the gate and escape!";
     [SerializeField] TextMeshProUGUI labelText;
+
+    
     public string LabelText
     {
         get
@@ -102,11 +107,11 @@ public class GameBehavior : MonoBehaviour, Imanager
             _buttonPressed = value;
             if(_buttonPressed )
             {
-                LabelText = "Woah a gun! wait what's that noise?";
+                LabelText = "I hear the gate opening! Let's get out of here!";
                 g2b.OpenGate();
-                GameObject.Find("EnemyGroup").SetActive(true);
-                GameObject.Find("Revolver").SetActive(true);
-
+                this.gameObject.GetComponent<MyTimer>().StartTimer();
+                enemyGroup.SetActive(true);
+                revolver.SetActive(true);
             }
         }
     }

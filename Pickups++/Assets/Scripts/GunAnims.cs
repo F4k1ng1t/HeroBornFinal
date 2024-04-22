@@ -14,11 +14,10 @@ public class GunAnims : MonoBehaviour
     }
     public void Shoot()
     {
+        GetComponent<AudioSource>().Play();
         if (_anim != null)
         {
-
             _anim.Play("Recoil");
-           
         }
     }
     public void Reload()

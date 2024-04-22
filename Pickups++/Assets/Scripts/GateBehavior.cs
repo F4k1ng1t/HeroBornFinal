@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GateBehavior : MonoBehaviour
@@ -41,9 +42,10 @@ public class GateBehavior : MonoBehaviour
                 {
                     Lock1.SetActive(false);
                     gameManager.Locks -= 1;
-                    LeftDoor.SetActive(false);
-                    RightDoor.SetActive(false);
-                    
+                    //LeftDoor.SetActive(false);
+                    //RightDoor.SetActive(false);
+                    Animator _anim = GetComponent<Animator>();
+                    _anim.Play("GateOpen1");
 
                 }
 

@@ -46,8 +46,8 @@ public class PlayerBehavior : MonoBehaviour
     public bool keyIsOut = false;
     public bool hasKey = false;
 
-    public float cooldownTimestamp = 0f;
-    public float cooldown = 0.5f;
+    float cooldownTimestamp = 0f;
+    [SerializeField] float cooldown = 0.5f;
 
 
     public bool invertCamera = false;
@@ -207,6 +207,7 @@ public class PlayerBehavior : MonoBehaviour
             {
                 flashlightLight.intensity = 0;
                 flashlightIsOn = false;
+                flashlight.GetComponent<AudioSource>().Play();
                 //flashLightCollider.SetActive(false);
             }
                 
@@ -214,6 +215,7 @@ public class PlayerBehavior : MonoBehaviour
             {
                 flashlightLight.intensity = 20;
                 flashlightIsOn = true;
+                flashlight.GetComponent<AudioSource>().Play();
                 //flashLightCollider.SetActive(true);
 
             }
