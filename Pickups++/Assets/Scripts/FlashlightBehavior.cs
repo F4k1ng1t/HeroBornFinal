@@ -22,7 +22,7 @@ public class FlashlightBehavior : MonoBehaviour
     {
         if (other.gameObject.name == "Player")
         {
-            Text.SetActive(true);
+            
             if (Input.GetKey(KeyCode.E))
             {
                 Destroy(this.transform.parent.gameObject);

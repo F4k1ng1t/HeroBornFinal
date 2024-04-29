@@ -86,7 +86,7 @@ public class PlayerBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
         vInput = Input.GetAxis("Vertical") * moveSpeed;
         hInput = Input.GetAxis("Horizontal") * moveSpeed;
         
@@ -112,6 +112,7 @@ public class PlayerBehavior : MonoBehaviour
             {
                 flashlight.SetActive(false);
                 flashlightIsOut = false;
+                flashlightIsOn = false;
                 gun.SetActive(true);
                 gunIsOut = true;
             }
@@ -184,6 +185,7 @@ public class PlayerBehavior : MonoBehaviour
             {
                 flashlight.SetActive(false);
                 flashlightIsOut = false;
+                flashlightIsOn = false;
                 key.SetActive(true);
                 keyIsOut = true;
             }

@@ -14,6 +14,7 @@ public class VolumeControl : MonoBehaviour
     [SerializeField] Toggle _toggle;
     private bool _disableToggleEvent;
 
+
     private void Awake()
     {
         _slider.onValueChanged.AddListener(HandleSliderValueChanged);
@@ -24,11 +25,21 @@ public class VolumeControl : MonoBehaviour
     {
         if (_disableToggleEvent)
             return;
-            
-        if(enableSound)
+
+        if (enableSound)
+        {
             _slider.value = _slider.maxValue;
+            Debug.Log("Sound On");
+        }
+            
+           
         else
+        {
             _slider.value = _slider.minValue;
+            Debug.Log("Sound Off");
+        }
+            
+            
     }
 
     private void OnDisable()
@@ -51,8 +62,5 @@ public class VolumeControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

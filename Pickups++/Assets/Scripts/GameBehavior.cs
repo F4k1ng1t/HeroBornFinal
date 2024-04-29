@@ -22,7 +22,7 @@ public class GameBehavior : MonoBehaviour, Imanager
     private int _locksRemaining = 3;
     
     public int maxKeys = 3;
-    public bool showWinScreen = false;
+    public bool showWinScreen;
     public bool showLossScreen = false;
     public PlayerBehavior Player;
     private int currentHP;
@@ -105,7 +105,7 @@ public class GameBehavior : MonoBehaviour, Imanager
         set
         {
             _buttonPressed = value;
-            if(_buttonPressed )
+            if(_buttonPressed)
             {
                 LabelText = "I hear the gate opening! Let's get out of here!";
                 g2b.OpenGate();
@@ -198,38 +198,21 @@ public class GameBehavior : MonoBehaviour, Imanager
         Player.playerCanMove = false;
         cam.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
+    IEnumerator WaitAndRestart()
+    {
+        yield return new WaitForSeconds(1);
+        Utilities.RestartLevel(1);
+    }
     private void OnGUI()
     {
-        GUI.Box(new Rect(20,50,150,25), "Keys Collected:" + _keysCollected);
-
-        
         if (showLossScreen)
         {
-            UnityEngine.Cursor.lockState = CursorLockMode.Confined;
-            if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50,200,100),"You died."))
-            {
-                try
-                {
-                    Utilities.RestartLevel(-1);
-                    debug("Level restarted successfully");
-                }
-                catch (System.ArgumentException e)
-                {
-                    Utilities.RestartLevel(0);
-                    debug($"Reverting to scene 0: {e.ToString()}");
-                }
-                finally
-                {
-                    debug("Restart handled");
-                }
-            }
+            StartCoroutine(WaitAndRestart());
+            
         }
-        if(showWinScreen) {
-            UnityEngine.Cursor.lockState = CursorLockMode.Confined;
-            if (GUI.Button(new Rect(Screen.width/2 - 100,Screen.height/2 - 50,200,100),"You Escaped!"))
-            {
-                Utilities.RestartLevel();
-            }
+        if (showWinScreen)
+        {
+
         }
     }
     

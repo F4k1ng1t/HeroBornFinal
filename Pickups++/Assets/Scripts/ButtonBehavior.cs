@@ -38,7 +38,7 @@ public class ButtonBehavior : MonoBehaviour
                 Text.SetActive(false);
                 gameManager.ButtonPressed = true;
             }
-            else if (Input.GetKey(KeyCode.E) && gameManager.Locks >= 0)
+            else if (Input.GetKey(KeyCode.E) && gameManager.Locks > 0)
             {
                 _anim.Play("ButtonPress");
                 gameManager.LabelText = "Hm. nothing happened.";
